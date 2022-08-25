@@ -14,6 +14,10 @@
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
+    "@types/jest": "^28.1.8",
+    "@types/node": "^18.7.13",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
     "eslint-config-react-app": "^7.0.1",
     "monday-sdk-js": "^0.1.2",
     "monday-ui-react-core": "^1.54.0",
@@ -37,6 +41,7 @@
     ]
   },
   "devDependencies": {
+    "@types/monday-sdk-js": "^0.1.5",
     "concurrently": "^5.2.0",
     "cross-port-killer": "^1.2.1",
     "ngrok": "^3.2.7",
