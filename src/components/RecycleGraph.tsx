@@ -2,6 +2,18 @@ import React, { useState } from "react";
 import { DateTime } from "luxon";
 import mondaySdk from "monday-sdk-js";
 
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Line } from "react-chartjs-2";
+
 // @ts-ignore (no declared types)
 import { Button, Flex } from "monday-ui-react-core";
 import { useEffect } from "react";
@@ -15,7 +27,99 @@ declare global {
   }
 }
 
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
 const monday = mondaySdk();
+
+const ChartContainer = ({
+  counts,
+  total,
+  streak,
+}: {
+  counts: Array<number>;
+  total: number;
+  streak: number;
+}) => {
+  const chartData = {
+    labels: counts,
+    datasets: [
+      {
+        label: "Recycling counts",
+        data: counts,
+        backgroundColor: "rgba(99, 116, 69, 1)",
+        borderColor: "rgba(142, 167, 96, 1)",
+      },
+    ],
+  };
+
+  const chartConfig = {
+    type: "line",
+    data: counts,
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+    scales: {
+      xAxis: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          display: false,
+        },
+      },
+      yAxis: {
+        min: 0,
+        grid: {
+          display: false,
+        },
+        ticks: {
+          display: false,
+        },
+      },
+    },
+  };
+
+  return (
+    <div
+      id="recycle-line-chart-container"
+      style={{
+        background: "rgba(202, 217, 173, 0.2)",
+        padding: "10px 22px 10px 22px",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {streak ? `${streak}-day streak!` : "Start a streak by recycling!"}
+      </div>
+      <Line options={chartConfig} data={chartData} />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginBottom: ".25em",
+        }}
+      >
+        # of plastics recycled: {total}
+      </div>
+    </div>
+  );
+};
 
 const RemoveButton = (props: React.HTMLAttributes<SVGElement>) => (
   <svg
@@ -84,9 +188,20 @@ const debugBackfill = (
 };
 
 export const RecycleGraphPane = () => {
+  // State
   const [recycleCount, setRecycleCount] = useState(0);
   const [last10DaysRecycleCount, setRecycleCounts] = useState(
     DEFAULT_RECYCLABLES_COUNTS
+  );
+
+  // Derived state
+  const totalCount = last10DaysRecycleCount.reduce(
+    (total, curr) => total + curr,
+    0
+  );
+  const totalStreak = last10DaysRecycleCount.reduce(
+    (total, curr) => (curr ? total + 1 : 0),
+    0
   );
 
   // On first render, fetch recycling history of this instance
@@ -143,9 +258,14 @@ export const RecycleGraphPane = () => {
       return 0;
     });
   };
+
   return (
     <Flex direction={Flex.directions.COLUMN} gap={Flex.gaps.SMALL}>
-      <img src="graph-ss.png" alt="recycle graph" />
+      <ChartContainer
+        counts={last10DaysRecycleCount}
+        total={totalCount}
+        streak={totalStreak}
+      />
       <Flex gap={Flex.gaps.SMALL}>
         <div>
           <div>
@@ -166,7 +286,9 @@ export const RecycleGraphPane = () => {
             style={{ cursor: "pointer", userSelect: "none" }}
           />
         </span>
-        <Button onClick={submitCount}>Submit</Button>
+        <Button color={Button.colors.POSITIVE} onClick={submitCount}>
+          Submit
+        </Button>
       </Flex>
     </Flex>
   );
