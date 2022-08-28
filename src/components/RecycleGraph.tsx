@@ -42,7 +42,7 @@ const AddButton = (props: React.HTMLAttributes<SVGElement>) => (
   </svg>
 );
 
-export const RecycleGraph = () => {
+export const RecycleGraphPane = () => {
   const [recycleCount, setRecycleCount] = useState(0);
   const reduceCount = () =>
     setRecycleCount((prev) => {

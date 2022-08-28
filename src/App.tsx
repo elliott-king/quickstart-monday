@@ -5,7 +5,7 @@ import "monday-ui-react-core/dist/main.css";
 //Explore more Monday React Components here: https://style.monday.com/
 // @ts-ignore (no declared types)
 import { AttentionBox, Box, Flex } from "monday-ui-react-core";
-import { RecycleGraph } from "./components/RecycleGraph";
+import { RecycleGraphPane } from "./components/RecycleGraph";
 import { NotClippy } from "./components/NotClippy";
 import { RecycleChecker } from "./components/RecycleChecker";
 import { RecyclingMap } from "./components/RecyclingMap";
@@ -31,7 +31,7 @@ const App = () => {
             gap={Flex.gaps.LARGE}
             style={{ padding: "30px" }}
           >
-            <RecycleGraph />
+            <RecycleGraphPane />
             <NotClippy />
           </Flex>
           <Flex
