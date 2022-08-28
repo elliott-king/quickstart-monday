@@ -104,7 +104,9 @@ const ChartContainer = ({
           justifyContent: "center",
         }}
       >
-        {streak ? `${streak}-day streak!` : "Start a streak by recycling!"}
+        <strong>
+          {streak ? `${streak}-day streak!` : "Start a streak by recycling!"}
+        </strong>
       </div>
       <Line options={chartConfig} data={chartData} />
       <div
@@ -115,7 +117,7 @@ const ChartContainer = ({
           marginBottom: ".25em",
         }}
       >
-        # of plastics recycled: {total}
+        <strong># of plastics recycled: {total}</strong>
       </div>
     </div>
   );
