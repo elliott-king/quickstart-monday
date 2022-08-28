@@ -62,11 +62,14 @@ export const RecycleGraphPane = () => {
           </div>
         </div>
         <span style={{ display: "inline-flex", alignItems: "center" }}>
-          <RemoveButton onClick={reduceCount} style={{ cursor: "pointer" }} />
+          <RemoveButton
+            onClick={reduceCount}
+            style={{ cursor: "pointer", userSelect: "none" }}
+          />
           &nbsp;{recycleCount}&nbsp;
           <AddButton
             onClick={() => setRecycleCount(recycleCount + 1)}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", userSelect: "none" }}
           />
         </span>
         {/* todo: actually do something with this */}
