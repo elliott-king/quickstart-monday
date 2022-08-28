@@ -151,6 +151,7 @@ const RecyclingNumber = ({
         height: "125px",
         width: "408px",
         color: "black",
+        cursor: "pointer",
       }}
       onClick={onClick}
     >
