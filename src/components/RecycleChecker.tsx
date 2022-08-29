@@ -194,7 +194,11 @@ export const RecycleChecker = () => {
 
   const handleSearchSubmit = () => {
     console.log(searchInput);
+    // Process the input for google search
+    const input = ("can I recycle " + searchInput).split(" ").join("+");
     setSearchInput("");
+    // Open search in new tab
+    window.open(`https://www.google.com/search?q=${input}`, "_blank");
   };
 
   return (
@@ -220,7 +224,7 @@ export const RecycleChecker = () => {
             <h4>Can I Recycle This?</h4>
             <SearchInput
               searchInput={searchInput}
-              onChange={(s: string) => setSearchInput(s)}
+              onChange={setSearchInput}
               onSubmit={handleSearchSubmit}
             />
           </div>
