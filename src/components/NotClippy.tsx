@@ -1,7 +1,7 @@
 import React from "react";
 
 // @ts-ignore (no declared types)
-import { AttentionBox, Box, Flex } from "monday-ui-react-core";
+import { Flex } from "monday-ui-react-core";
 
 export const NotClippy = () => (
   <Flex>

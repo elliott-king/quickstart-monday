@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 // @ts-ignore (no declared types)
-import { AttentionBox, Box, Flex, Search } from "monday-ui-react-core";
+import { Flex } from "monday-ui-react-core";
 
 const numberContents = [
   {
