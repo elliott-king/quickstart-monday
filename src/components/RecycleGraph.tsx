@@ -216,7 +216,7 @@ export const RecycleGraphPane = () => {
       monday.storage.instance.getItem(dtstr).then((res) => {
         // console.log(dtstr);
         // console.log(res.data);
-        return res.data?.value || 0;
+        return parseInt(res.data?.value || 0);
       })
     );
     Promise.all(promises).then(setRecycleCounts);
