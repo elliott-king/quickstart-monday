@@ -43,7 +43,7 @@ const numberContents = [
     number: 6,
     name: "PS (Polystyrene)",
     content: "Plastic commonly found in coffee cups",
-    example: "thermometers, license plate frames, egg shell cartoons",
+    example: "thermometers, license plate frames, egg shell cartons",
     recyclable: "Recyclable at Specialist Points Only",
   },
   {
