@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DateTime } from "luxon";
 import mondaySdk from "monday-sdk-js";
 import "./App.css";
@@ -11,8 +11,15 @@ import { NotClippy } from "./components/NotClippy";
 import { RecycleChecker } from "./components/RecycleChecker";
 import { RecyclingMap } from "./components/RecyclingMap";
 import { RecyclingRemainder } from "./components/RecyclingRemainder";
+import { WidthStyle } from "./constants";
 
 const DEFAULT_RECYCLABLES_COUNTS: Array<number> = Array(10).fill(0);
+const WINDOW_WIDTH_BREAKPOINTS = [
+  { label: WidthStyle.ONE_COL, value: 0 },
+  { label: WidthStyle.TWO_COL_THIN, value: 600 },
+  { label: WidthStyle.TWO_COL_MED, value: 800 },
+  { label: WidthStyle.MAX, value: 1200 },
+];
 
 declare global {
   // Allows us to add debug method to global window handler
@@ -50,12 +57,24 @@ const debugBackfill = (
   setRecycleCounts(counts);
 };
 
+const getWidthBreakpoint = (windowWidth: number) => {
+  for (let idx = 0; idx < WINDOW_WIDTH_BREAKPOINTS.length; idx++) {
+    const { value } = WINDOW_WIDTH_BREAKPOINTS[idx];
+    if (value > windowWidth) return WINDOW_WIDTH_BREAKPOINTS[idx - 1].label;
+  }
+  return WINDOW_WIDTH_BREAKPOINTS[WINDOW_WIDTH_BREAKPOINTS.length - 1].label;
+};
+
 const App = () => {
   // State
   const [recycleCount, setRecycleCount] = useState(0);
   const [last10DaysRecycleCount, setRecycleCounts] = useState(
     DEFAULT_RECYCLABLES_COUNTS
   );
+  const [breakpoint, setBreakpoint] = useState(
+    getWidthBreakpoint(document.documentElement.clientWidth)
+  );
+  const prevWindowWidth = useRef(document.documentElement.clientWidth);
 
   // Derived state
   const totalCount = last10DaysRecycleCount.reduce(
@@ -86,6 +105,23 @@ const App = () => {
   useEffect(() => {
     window.debugBackfill = () => debugBackfill(setRecycleCounts);
     return () => (window.debugBackfill = undefined);
+  }, []);
+
+  // Update state on window width changed
+  useEffect(() => {
+    const handleResize = () => {
+      const newWidth = document.documentElement.clientWidth;
+      WINDOW_WIDTH_BREAKPOINTS.forEach(({ value }) => {
+        if (
+          (prevWindowWidth.current < value && newWidth >= value) ||
+          (prevWindowWidth.current >= value && newWidth < value)
+        )
+          setBreakpoint(getWidthBreakpoint(newWidth));
+      });
+      prevWindowWidth.current = newWidth;
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const reduceCount = () =>
@@ -155,8 +191,6 @@ const App = () => {
             direction={Flex.directions.COLUMN}
             style={{ padding: "30px", borderLeft: "black 2px solid" }}
           >
-            {/* TODO: change favicon */}
-            {/* todo: search bar */}
             <RecycleChecker />
             <Flex gap={Flex.gaps.LARGE}>
               <RecyclingMap />
