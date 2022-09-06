@@ -155,7 +155,7 @@ const RecyclingNumber = ({
       }}
       onClick={onClick}
     >
-      <Flex gap={Flex.gaps.LARGE}>
+      <Flex gap={Flex.gaps.LARGE} style={{ height: "100%" }}>
         <img
           src={`recycle-${content.number}.png`}
           alt={`Recycle triangle with number ${content.number}`}
