@@ -258,7 +258,11 @@ const App = () => {
 
   return (
     <div className="App">
-      <Box rounded={Box.roundeds.MEDIUM} border={Box.borders.DEFAULT}>
+      <Box
+        rounded={Box.roundeds.MEDIUM}
+        border={Box.borders.DEFAULT}
+        backgroundColor={Box.backgroundColors.GREY_BACKGROUND_COLOR}
+      >
         <Flex>
           {firstColumn(breakpoint)}
           {secondColumn(breakpoint)}
