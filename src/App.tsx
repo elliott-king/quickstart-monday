@@ -8,7 +8,7 @@ import "monday-ui-react-core/dist/main.css";
 import { Box, Flex } from "monday-ui-react-core";
 import { RecycleGraphPane } from "./components/RecycleGraph";
 import { NotClippy } from "./components/NotClippy";
-import { RecycleChecker } from "./components/RecycleChecker";
+import { RecycleChecker, RecyclingNumbers } from "./components/RecycleChecker";
 import { RecyclingMap } from "./components/RecyclingMap";
 import { RecyclingRemainder } from "./components/RecyclingRemainder";
 import { WidthStyle } from "./constants";
@@ -16,8 +16,8 @@ import { WidthStyle } from "./constants";
 const DEFAULT_RECYCLABLES_COUNTS: Array<number> = Array(10).fill(0);
 const WINDOW_WIDTH_BREAKPOINTS = [
   { label: WidthStyle.ONE_COL, value: 0 },
-  { label: WidthStyle.TWO_COL_THIN, value: 600 },
-  { label: WidthStyle.TWO_COL_MED, value: 800 },
+  { label: WidthStyle.TWO_COL_THIN, value: 800 },
+  { label: WidthStyle.TWO_COL_MED, value: 900 },
   { label: WidthStyle.MAX, value: 1200 },
 ];
 
@@ -167,36 +167,101 @@ const App = () => {
     });
   };
 
+  const firstColumn = (breakpoint: WidthStyle) => {
+    let contents: JSX.Element | null = null;
+    const graph = (
+      <RecycleGraphPane
+        count={recycleCount}
+        historycounts={last10DaysRecycleCount}
+        total={totalCount}
+        streak={totalStreak}
+        onReduceCount={reduceCount}
+        onIncreaseCount={increaseCount}
+        onSubmit={submitCount}
+      />
+    );
+    const notClippy = <NotClippy />;
+
+    if (
+      breakpoint === WidthStyle.MAX ||
+      breakpoint === WidthStyle.TWO_COL_MED
+    ) {
+      contents = (
+        <>
+          {graph}
+          {notClippy}
+        </>
+      );
+    } else if (breakpoint === WidthStyle.ONE_COL) {
+      contents = (
+        <>
+          {notClippy}
+          {graph}
+        </>
+      );
+    } else
+      contents = (
+        <>
+          {graph}
+          <RecyclingNumbers />
+        </>
+      );
+
+    return (
+      <Flex
+        direction={Flex.directions.COLUMN}
+        gap={Flex.gaps.LARGE}
+        style={{ padding: "30px" }}
+      >
+        {contents}
+      </Flex>
+    );
+  };
+
+  const secondColumn = (breakpoint: WidthStyle) => {
+    if (breakpoint === WidthStyle.ONE_COL) return null;
+    let contents: JSX.Element | null = null;
+    if (breakpoint === WidthStyle.MAX) {
+      contents = (
+        <>
+          <RecycleChecker />
+          <Flex gap={Flex.gaps.LARGE}>
+            <RecyclingMap breakpoint={breakpoint} />
+            <RecyclingRemainder total={totalCount} />
+          </Flex>
+        </>
+      );
+    } else if (breakpoint === WidthStyle.TWO_COL_MED) {
+      contents = (
+        <>
+          <RecyclingNumbers />
+          <RecyclingMap breakpoint={breakpoint} />
+        </>
+      );
+    } else
+      contents = (
+        <>
+          <NotClippy />
+          <RecyclingMap breakpoint={breakpoint} />
+        </>
+      );
+
+    return (
+      <Flex
+        direction={Flex.directions.COLUMN}
+        style={{ padding: "30px", borderLeft: "black 2px solid" }}
+      >
+        {contents}
+      </Flex>
+    );
+  };
+
   return (
     <div className="App">
       <Box rounded={Box.roundeds.MEDIUM} border={Box.borders.DEFAULT}>
         <Flex>
-          <Flex
-            direction={Flex.directions.COLUMN}
-            gap={Flex.gaps.LARGE}
-            style={{ padding: "30px" }}
-          >
-            <RecycleGraphPane
-              count={recycleCount}
-              historycounts={last10DaysRecycleCount}
-              total={totalCount}
-              streak={totalStreak}
-              onReduceCount={reduceCount}
-              onIncreaseCount={increaseCount}
-              onSubmit={submitCount}
-            />
-            <NotClippy />
-          </Flex>
-          <Flex
-            direction={Flex.directions.COLUMN}
-            style={{ padding: "30px", borderLeft: "black 2px solid" }}
-          >
-            <RecycleChecker />
-            <Flex gap={Flex.gaps.LARGE}>
-              <RecyclingMap />
-              <RecyclingRemainder total={totalCount} />
-            </Flex>
-          </Flex>
+          {firstColumn(breakpoint)}
+          {secondColumn(breakpoint)}
         </Flex>
       </Box>
     </div>

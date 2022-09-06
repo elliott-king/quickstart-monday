@@ -181,8 +181,7 @@ const RecyclingNumber = ({
   );
 };
 
-export const RecycleChecker = () => {
-  const [searchInput, setSearchInput] = useState("");
+export const RecyclingNumbers = () => {
   const [recyclingNumber, setRecyclingNumber] = useState(0);
 
   const handleRecyclingBoxClick = () => {
@@ -191,6 +190,24 @@ export const RecycleChecker = () => {
       return prev + 1;
     });
   };
+
+  return (
+    <Flex
+      style={{ textAlign: "center" }}
+      gap={Flex.gaps.MEDIUM}
+      direction={Flex.directions.COLUMN}
+    >
+      <h4>Recycling Numbers + What They Mean</h4>
+      <RecyclingNumber
+        idx={recyclingNumber}
+        onClick={handleRecyclingBoxClick}
+      />
+    </Flex>
+  );
+};
+
+export const RecycleChecker = () => {
+  const [searchInput, setSearchInput] = useState("");
 
   const handleSearchSubmit = () => {
     console.log(searchInput);
@@ -228,17 +245,7 @@ export const RecycleChecker = () => {
               onSubmit={handleSearchSubmit}
             />
           </div>
-          <Flex
-            style={{ textAlign: "center" }}
-            gap={Flex.gaps.MEDIUM}
-            direction={Flex.directions.COLUMN}
-          >
-            <h4>Recycling Numbers + What They Mean</h4>
-            <RecyclingNumber
-              idx={recyclingNumber}
-              onClick={handleRecyclingBoxClick}
-            />
-          </Flex>
+          <RecyclingNumbers />
         </Flex>
       </div>
     </div>
