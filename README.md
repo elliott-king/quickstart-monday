@@ -25,6 +25,11 @@ And then to run an application with automatic virtual ngrok tunnel, run:
 
 The above isn't working for me (Elliott) instead of the URL, you can use the `Addr` and visit it locally.
 
+## Note:
+
+If you want Google maps to work locally, you need your own API key. The one in here will only work for the Monday app. https://developers.google.com/maps/documentation/embed/map-generator?authuser=1#costs
+
+
 ## Configure Monday App 
 
 1. Open monday.com, login to your account and go to a "Developers" section.
